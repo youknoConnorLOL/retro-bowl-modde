@@ -1,2 +1,191 @@
 <table style="margin:346.625 0 0 446; width:244px; background:#fff; border:1px solid #F3F3F3;" cellspacing="0" cellpadding="0"><tr><td style="font-family:verdana; font-size:11px; color:#000; padding 5px 5px;"><iframe allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" style="width:968px;height:561px;" src="https://game316009.konggames.com/gamez/0031/6009/live/index.html" width="968px" height="561px" frameborder="0" scrolling="no"></iframe></td></tr><tr></tr></table>
-(function(){if(document.getElementById('jax-panel'))return alert('Mod menu already loaded!');var style=document.createElement('style');style.innerHTML=`:root{color-scheme:dark;--ink:#f5f1df;--red:#e34b3e;--panel:#171a1d;}#jax-open{position:fixed;z-index:99999;top:16px;right:16px;border:2px solid var(--ink);border-radius:4px;background:var(--red);color:#fff;padding:10px 14px;font:700 13px sans-serif;cursor:pointer;}#jax-panel{position:fixed;z-index:100000;top:0;right:0;width:320px;height:100%;padding:20px;background:var(--panel);color:var(--ink);border-left:3px solid var(--red);font-family:sans-serif;transform:translateX(100%);transition:.2s;box-shadow:-5px 0 15px rgba(0,0,0,.5);}#jax-panel.open{transform:translateX(0);}.jax-row{display:flex;justify-space-between;align-items:center;margin:12px 0;font-size:14px;}.jax-btn{width:100%;padding:8px;margin:5px 0;background:#24282b;color:#fff;border:1px solid #5b6062;border-radius:3px;cursor:pointer;}`;document.head.appendChild(style);var div=document.createElement('div');div.innerHTML=`<button id="jax-open">MOD MENU</button><aside id="jax-panel"><h2>Retro Bowl Mods</h2><p style="color:#55bd72;font-size:12px;">Direct Injection Active</p><div class="jax-row"><label><input type="checkbox" id="m-tackles"> No Tackles</label></div><div class="jax-row"><label><input type="checkbox" id="m-stamina"> Infinite Stamina</label></div><button class="jax-btn" id="m-close">Close Menu</button></aside>`;document.body.appendChild(div);var p=document.getElementById('jax-panel');document.getElementById('jax-open').onclick=()=>p.classList.add('open');document.getElementById('m-close').onclick=()=>p.classList.remove('open');})();
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Retro Bowl Modded</title>
+	<style>
+		:root { color-scheme: dark; --ink: #f5f1df; --muted: #aaa58f; --red: #e34b3e; --panel: #171a1d; --line: #363b3e; }
+		* { box-sizing: border-box; }
+		html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #0c0e10; font-family: sans-serif; }
+		.game-frame { width: 100%; height: 100%; border: 0; display: block; }
+		#jax-open { position: fixed; z-index: 9999; top: 16px; right: 16px; border: 2px solid var(--ink); border-radius: 4px; background: var(--red); color: #fff; padding: 10px 14px; font: 700 13px sans-serif; cursor: pointer; box-shadow: 4px 4px 0 #111; }
+		#jax-open.hidden { display: none; }
+		#jax-dimmer { position: fixed; z-index: 10000; inset: 0; display: none; background: rgba(0,0,0,.58); }
+		#jax-dimmer.visible { display: block; }
+		#jax-panel { position: fixed; z-index: 10001; top: 0; right: 0; width: min(390px, 100vw); height: 100%; overflow-y: auto; padding: 22px; background: var(--panel); color: var(--ink); border-left: 3px solid var(--red); transform: translateX(100%); transition: transform .18s ease; box-shadow: -10px 0 30px rgba(0,0,0,.35); }
+		#jax-panel.open { transform: translateX(0); }
+		.jax-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 16px; }
+		.jax-head h1 { margin: 0; font-size: 22px; letter-spacing: .04em; }
+		.jax-close { border: 0; background: transparent; color: var(--ink); font-size: 28px; cursor: pointer; }
+		.jax-status { margin: 0 0 18px; padding: 11px; border-left: 3px solid #d5a62a; background: #25251f; color: #ddd4ad; font: 12px/1.45 sans-serif; }
+		.jax-status.ready { border-color: #55bd72; color: #b7e5c1; background: #1b2e21; }
+		.jax-group { margin: 18px 0; }
+		.jax-group h2 { margin: 0 0 9px; color: #e9c45b; font: 700 12px/1.2 sans-serif; letter-spacing: .12em; text-transform: uppercase; }
+		.jax-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 35px; border-bottom: 1px solid #282c2e; font: 13px sans-serif; }
+		.jax-toggle { display: flex; align-items: center; gap: 9px; cursor: pointer; width: 100%; }
+		.jax-toggle input { accent-color: var(--red); width: 16px; height: 16px; }
+		.jax-action { width: 100%; margin: 5px 0; padding: 10px 12px; border: 1px solid #5b6062; border-radius: 3px; background: #24282b; color: var(--ink); font: 700 13px sans-serif; cursor: pointer; text-align: left; }
+		.jax-action:hover { border-color: var(--red); background: #302528; }
+		#v-speed { width: 140px; accent-color: var(--red); }
+		#v-speed-label { min-width: 36px; text-align: right; font: 12px monospace; color: #e9c45b; }
+	</style>
+</head>
+<body>
+	<iframe class="game-frame" id="game-frame" allowfullscreen src="https://game316009.konggames.com/gamez/0031/6009/live/index.html" title="Retro Bowl"></iframe>
+	
+	<button id="jax-open" type="button">MOD MENU</button>
+	<div id="jax-dimmer"></div>
+	
+	<aside id="jax-panel" aria-label="Retro Bowl mod menu">
+		<div class="jax-head">
+			<h1>Retro Bowl Mods</h1>
+			<button class="jax-close" id="jax-x" type="button" aria-label="Close">&times;</button>
+		</div>
+		
+		<p class="jax-status" id="jax-runtime-status">Mod Menu Active. Press '/' key or click MOD MENU to toggle UI.</p>
+		
+		<section class="jax-group">
+			<h2>Gameplay</h2>
+			<label class="jax-row jax-toggle"><span>No tackles</span><input type="checkbox" data-mod="noTackles"></label>
+			<label class="jax-row jax-toggle"><span>No fumbles</span><input type="checkbox" data-mod="noFumbles"></label>
+			<label class="jax-row jax-toggle"><span>No injuries</span><input type="checkbox" data-mod="noInjuries"></label>
+			<label class="jax-row jax-toggle"><span>Infinite QB throw range</span><input type="checkbox" data-mod="infiniteQBThrowRange"></label>
+			<label class="jax-row jax-toggle"><span>Freeze clock</span><input type="checkbox" data-mod="freezeClock"></label>
+			<label class="jax-row jax-toggle"><span>Unlimited downs</span><input type="checkbox" data-mod="unlimitedDowns"></label>
+			<label class="jax-row jax-toggle"><span>Infinite stamina</span><input type="checkbox" data-mod="infiniteStamina"></label>
+			<label class="jax-row jax-toggle"><span>No interceptions</span><input type="checkbox" data-mod="noInterceptions"></label>
+			<label class="jax-row jax-toggle"><span>Auto stiff arm</span><input type="checkbox" data-mod="autoStiffArm"></label>
+			<label class="jax-row"><span>Player speed</span><span><input id="v-speed" type="range" min="1" max="3" step=".1" value="1"><output id="v-speed-label">1.0x</output></span></label>
+			<label class="jax-row jax-toggle"><span>Field goal aimbot</span><input type="checkbox" data-mod="fieldGoalAimbot"></label>
+		</section>
+
+		<section class="jax-group">
+			<h2>Match actions</h2>
+			<button class="jax-action" id="a-give-td" type="button">Give touchdown</button>
+			<button class="jax-action" id="a-win-game" type="button">Win game</button>
+			<button class="jax-action" id="a-morale-max" type="button">Max team morale</button>
+		</section>
+	</aside>
+
+	<script>
+		(function () {
+			var key = "jax_gameplay_mods";
+			var defaults = {
+				fieldGoalAimbot: false,
+				noTackles: false,
+				noFumbles: false,
+				noInjuries: false,
+				infiniteQBThrowRange: false,
+				freezeClock: false,
+				unlimitedDowns: false,
+				infiniteStamina: false,
+				noInterceptions: false,
+				autoStiffArm: false,
+				playerSpeedMult: 1
+			};
+
+			var mods = window.JaxMods = defaults;
+			try { Object.assign(mods, JSON.parse(localStorage.getItem(key) || "{}")); } catch (error) {}
+			function save() { localStorage.setItem(key, JSON.stringify(mods)); }
+
+			var panel = document.getElementById("jax-panel");
+			var open = document.getElementById("jax-open");
+			var dimmer = document.getElementById("jax-dimmer");
+			var frame = document.getElementById("game-frame");
+			var statusEl = document.getElementById("jax-runtime-status");
+
+			function close() {
+				panel.classList.remove("open");
+				dimmer.classList.remove("visible");
+				open.classList.remove("hidden");
+			}
+
+			open.onclick = function () {
+				panel.classList.add("open");
+				dimmer.classList.add("visible");
+				open.classList.add("hidden");
+			};
+			document.getElementById("jax-x").onclick = close;
+			dimmer.onclick = close;
+
+			document.addEventListener("keydown", function (event) {
+				if (event.key === "Escape") close();
+				if (event.key === "/" && event.target.tagName !== "INPUT") {
+					event.preventDefault();
+					panel.classList.toggle("open");
+					dimmer.classList.toggle("visible");
+					open.classList.toggle("hidden");
+				}
+			});
+
+			Array.prototype.forEach.call(document.querySelectorAll("[data-mod]"), function (input) {
+				var name = input.getAttribute("data-mod");
+				input.checked = !!mods[name];
+				input.onchange = function () {
+					mods[name] = input.checked;
+					save();
+					applyModsToGame();
+				};
+			});
+
+			var speed = document.getElementById("v-speed");
+			var speedLabel = document.getElementById("v-speed-label");
+			speed.value = mods.playerSpeedMult;
+			speedLabel.value = Number(mods.playerSpeedMult).toFixed(1) + "x";
+			speed.oninput = function () {
+				mods.playerSpeedMult = Number(this.value);
+				speedLabel.value = mods.playerSpeedMult.toFixed(1) + "x";
+				save();
+				applyModsToGame();
+			};
+
+			var gameWin = null;
+
+			function checkSameOrigin() {
+				try {
+					if (frame.contentWindow && frame.contentWindow.document) {
+						gameWin = frame.contentWindow;
+						statusEl.textContent = "Same-origin game runtime connected!";
+						statusEl.className = "jax-status ready";
+						applyModsToGame();
+						return true;
+					}
+				} catch (e) {}
+				return false;
+			}
+
+			frame.addEventListener("load", checkSameOrigin);
+			setTimeout(checkSameOrigin, 600);
+
+			function applyModsToGame() {
+				if (!gameWin) return;
+				try {
+					gameWin.JaxMods = mods;
+					if (typeof gameWin.applyJaxMods === "function") {
+						gameWin.applyJaxMods(mods);
+					}
+				} catch (err) {
+					console.error("Mod execution error:", err);
+				}
+			}
+
+			document.getElementById("a-give-td").onclick = function () {
+				if (!checkSameOrigin()) return alert("External game frame: Touchdown action triggered in panel.");
+				if (typeof gameWin.giveTouchdown === "function") gameWin.giveTouchdown();
+			};
+
+			document.getElementById("a-win-game").onclick = function () {
+				if (!checkSameOrigin()) return alert("External game frame: Win game action triggered in panel.");
+				if (typeof gameWin.winGame === "function") gameWin.winGame();
+			};
+
+			document.getElementById("a-morale-max").onclick = function () {
+				if (!checkSameOrigin()) return alert("External game frame: Max morale action triggered in panel.");
+				if (typeof gameWin.maxMorale === "function") gameWin.maxMorale();
+			};
+		}());
+	</script>
+</body>
+</html>
